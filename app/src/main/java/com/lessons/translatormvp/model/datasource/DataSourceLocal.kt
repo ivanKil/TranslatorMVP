@@ -1,0 +1,12 @@
+package com.lessons.translatormvp.model.datasource
+
+import com.lessons.translatormvp.model.data.DataModel
+import io.reactivex.Observable
+
+class DataSourceLocal(
+    private val remoteProvider: DataSource<List<DataModel>> = RoomDataBaseImplementation()
+) :
+    DataSource<List<DataModel>> {
+
+    override fun getData(word: String): Observable<List<DataModel>> = remoteProvider.getData(word)
+}
