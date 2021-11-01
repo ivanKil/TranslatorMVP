@@ -4,18 +4,25 @@ import android.os.Bundle
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.widget.Toast
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.lessons.translatormvp.R
 import com.lessons.translatormvp.databinding.ActivityMainBinding
 import com.lessons.translatormvp.model.data.AppState
 import com.lessons.translatormvp.model.data.DataModel
-import com.lessons.translatormvp.presenter.Presenter
+import com.lessons.translatormvp.utils.isInternetAvailable
 import com.lessons.translatormvp.view.base.BaseActivity
-import com.lessons.translatormvp.view.base.View
 import com.lessons.translatormvp.view.main.adapter.MainAdapter
+import dagger.android.AndroidInjection
+import kotlinx.android.synthetic.main.activity_main.*
+import javax.inject.Inject
 
 class MainActivity : BaseActivity<AppState>() {
-
+    @Inject
+    internal lateinit var viewModelFactory: ViewModelProvider.Factory
+    override lateinit var model: MainViewModel
+    private val observer = Observer<AppState> { renderData(it) }
     private lateinit var binding: ActivityMainBinding
 
     private var adapter: MainAdapter? = null
@@ -26,18 +33,22 @@ class MainActivity : BaseActivity<AppState>() {
             }
         }
 
-    override fun createPresenter(): Presenter<AppState, View> {
-        return MainPresenterImpl()
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
+        AndroidInjection.inject(this)
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        model = viewModelFactory.create(MainViewModel::class.java)
+        model.subscribe().observe(this@MainActivity, observer)
         binding.searchView.setOnQueryTextListener(object :
             android.widget.SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(p0: String?): Boolean {
-                presenter.getData(p0 ?: "", true)
+                isNetworkAvailable = isInternetAvailable(applicationContext)
+                if (isNetworkAvailable) {
+                    model.getData(p0 ?: "", true).observe(this@MainActivity, observer)
+                } else {
+                    showNoInternetConnectionDialog()
+                }
                 return false
             }
 
@@ -85,10 +96,11 @@ class MainActivity : BaseActivity<AppState>() {
 
     private fun showErrorScreen(error: String?) {
         showViewError()
-        binding.errorTextview.text = error ?: getString(R.string.undefined_error)
-        binding.reloadButton.setOnClickListener {
-            presenter.getData("hi", true)
+        error_textview.text = error ?: getString(R.string.undefined_error)
+        reload_button.setOnClickListener {
+            model.getData("hi", true).observe(this, observer)
         }
+
     }
 
     private fun showViewSuccess() {

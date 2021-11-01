@@ -1,6 +1,7 @@
 package com.lessons.translatormvp.model.datasource
 
 import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
+import com.lessons.translatormvp.BuildConfig
 import com.lessons.translatormvp.model.data.DataModel
 import io.reactivex.Observable
 import okhttp3.Interceptor
@@ -31,7 +32,8 @@ class RetrofitImplementation : DataSource<List<DataModel>> {
     private fun createOkHttpClient(interceptor: Interceptor): OkHttpClient {
         val httpClient = OkHttpClient.Builder()
         httpClient.addInterceptor(interceptor)
-        httpClient.addInterceptor(HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY))
+        if (BuildConfig.DEBUG)
+            httpClient.addInterceptor(HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY))
         return httpClient.build()
     }
 
