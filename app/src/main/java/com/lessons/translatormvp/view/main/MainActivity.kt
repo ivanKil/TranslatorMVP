@@ -5,7 +5,6 @@ import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.widget.Toast
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.lessons.translatormvp.R
 import com.lessons.translatormvp.databinding.ActivityMainBinding
@@ -14,13 +13,11 @@ import com.lessons.translatormvp.model.data.DataModel
 import com.lessons.translatormvp.utils.isInternetAvailable
 import com.lessons.translatormvp.view.base.BaseActivity
 import com.lessons.translatormvp.view.main.adapter.MainAdapter
-import dagger.android.AndroidInjection
 import kotlinx.android.synthetic.main.activity_main.*
-import javax.inject.Inject
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainActivity : BaseActivity<AppState>() {
-    @Inject
-    internal lateinit var viewModelFactory: ViewModelProvider.Factory
+    val viewModel: MainViewModel by viewModel()
     override lateinit var model: MainViewModel
     private val observer = Observer<AppState> { renderData(it) }
     private lateinit var binding: ActivityMainBinding
@@ -34,18 +31,17 @@ class MainActivity : BaseActivity<AppState>() {
         }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        AndroidInjection.inject(this)
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        model = viewModelFactory.create(MainViewModel::class.java)
+        model = viewModel
         model.subscribe().observe(this@MainActivity, observer)
         binding.searchView.setOnQueryTextListener(object :
             android.widget.SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(p0: String?): Boolean {
                 isNetworkAvailable = isInternetAvailable(applicationContext)
                 if (isNetworkAvailable) {
-                    model.getData(p0 ?: "", true).observe(this@MainActivity, observer)
+                    model.getData(p0 ?: "", true)//.observe(this@MainActivity, observer)
                 } else {
                     showNoInternetConnectionDialog()
                 }
@@ -98,7 +94,7 @@ class MainActivity : BaseActivity<AppState>() {
         showViewError()
         error_textview.text = error ?: getString(R.string.undefined_error)
         reload_button.setOnClickListener {
-            model.getData("hi", true).observe(this, observer)
+            model.getData("hi", true)//.observe(this, observer)
         }
 
     }
