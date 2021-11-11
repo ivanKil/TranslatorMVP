@@ -1,7 +1,7 @@
-package com.lessons.translatormvp.model.datasource
+package com.lessons.translatormvp.model.repository
 
 import com.lessons.translatormvp.model.data.AppState
 
-interface DataSourceLocal<T> : DataSource<T> {
+interface RepositoryLocal<T> : Repository<T> {
     suspend fun saveToDB(appState: AppState)
 }

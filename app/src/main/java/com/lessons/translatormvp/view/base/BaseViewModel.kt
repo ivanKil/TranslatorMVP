@@ -9,18 +9,20 @@ abstract class BaseViewModel<T : AppState>(
     protected open val _mutableLiveData: MutableLiveData<T> = MutableLiveData()
 ) : ViewModel() {
     protected val viewModelCoroutineScope = CoroutineScope(
-        Dispatchers.Main
+        Dispatchers.IO
                 + SupervisorJob()
                 + CoroutineExceptionHandler { _, throwable -> handleError(throwable) }
     )
 
+    protected var job: Job? = null
+
     override fun onCleared() {
         super.onCleared()
-        cancelJob()
+        viewModelCoroutineScope.coroutineContext.cancelChildren()
     }
 
     protected fun cancelJob() {
-        viewModelCoroutineScope.coroutineContext.cancelChildren()
+        job?.cancel()
     }
 
     abstract fun getData(word: String, isOnline: Boolean)
