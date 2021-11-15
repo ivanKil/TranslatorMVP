@@ -1,5 +1,6 @@
 package com.lessons.translatormvp.model.data
 
+import com.lessons.models.DataModel
 import com.lessons.translatormvp.room.HistoryEntity
 import com.lessons.translatormvp.utils.ui.convertMeaningsToString
 

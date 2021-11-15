@@ -2,8 +2,8 @@ package com.lessons.translatormvp.utils.ui
 
 import android.content.Context
 import androidx.appcompat.app.AlertDialog
-import com.lessons.translatormvp.R
-import com.lessons.translatormvp.model.data.Meanings
+import com.lessons.models.Meanings
+import com.lessons.utils.R
 
 fun getStubAlertDialog(context: Context): AlertDialog {
     return getAlertDialog(context, null, null)

@@ -1,7 +1,7 @@
 package com.lessons.translatormvp.model.datasource
 
+import com.lessons.models.DataModel
 import com.lessons.translatormvp.model.data.AppState
-import com.lessons.translatormvp.model.data.DataModel
 import com.lessons.translatormvp.room.HistoryDao
 
 class RoomDataBaseImplementation(private val historyDao: HistoryDao) :

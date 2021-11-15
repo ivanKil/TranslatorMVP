@@ -1,7 +1,7 @@
 package com.lessons.translatormvp.di
 
 import androidx.room.Room
-import com.lessons.translatormvp.model.data.DataModel
+import com.lessons.models.DataModel
 import com.lessons.translatormvp.model.datasource.DataSource
 import com.lessons.translatormvp.model.datasource.DataSourceLocal
 import com.lessons.translatormvp.model.datasource.RetrofitImplementation

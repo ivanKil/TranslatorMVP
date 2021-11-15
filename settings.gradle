@@ -1,2 +1,4 @@
 rootProject.name = "TranslatorMVP"
 include ':app'
+include ':utils'
+include ':models'

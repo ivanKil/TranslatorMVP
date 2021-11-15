@@ -1,7 +1,7 @@
 package com.lessons.translatormvp.view.history
 
+import com.lessons.models.DataModel
 import com.lessons.translatormvp.model.data.AppState
-import com.lessons.translatormvp.model.data.DataModel
 import com.lessons.translatormvp.model.repository.Repository
 import com.lessons.translatormvp.model.repository.RepositoryLocal
 import com.lessons.translatormvp.presenter.Interactor

@@ -6,10 +6,10 @@ import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
 import androidx.appcompat.widget.SearchView
+import com.lessons.models.DataModel
 import com.lessons.translatormvp.R
 import com.lessons.translatormvp.databinding.ActivityMainBinding
 import com.lessons.translatormvp.model.data.AppState
-import com.lessons.translatormvp.model.data.DataModel
 import com.lessons.translatormvp.utils.isInternetAvailable
 import com.lessons.translatormvp.utils.ui.convertMeaningsToString
 import com.lessons.translatormvp.view.base.BaseActivity
