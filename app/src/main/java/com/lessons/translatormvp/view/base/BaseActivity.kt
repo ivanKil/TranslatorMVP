@@ -4,10 +4,10 @@ import android.os.Bundle
 import android.os.PersistableBundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import com.lessons.models.DataModel
 import com.lessons.translatormvp.R
 import com.lessons.translatormvp.databinding.LoadingLayoutBinding
 import com.lessons.translatormvp.model.data.AppState
-import com.lessons.translatormvp.model.data.DataModel
 import com.lessons.translatormvp.presenter.Interactor
 import com.lessons.translatormvp.utils.isInternetAvailable
 import com.lessons.translatormvp.utils.ui.AlertDialogFragment

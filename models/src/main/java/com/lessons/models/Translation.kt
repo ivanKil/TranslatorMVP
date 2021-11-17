@@ -1,4 +1,4 @@
-package com.lessons.translatormvp.model.data
+package com.lessons.models
 
 import com.google.gson.annotations.SerializedName
 

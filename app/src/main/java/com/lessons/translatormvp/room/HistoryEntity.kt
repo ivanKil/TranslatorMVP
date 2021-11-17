@@ -4,14 +4,12 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.Index
 import androidx.room.PrimaryKey
-import com.lessons.translatormvp.model.data.DataModel
-import com.lessons.translatormvp.model.data.Meanings
-import com.lessons.translatormvp.model.data.Translation
+import com.lessons.models.DataModel
+import com.lessons.models.Meanings
+import com.lessons.models.Translation
 
-private const val WORD = "word"
-private const val DESCRIPTION = "description"
 
-@Entity(indices = arrayOf(Index(value = arrayOf(WORD), unique = true)))
+@Entity(indices = arrayOf(Index(value = arrayOf(HistoryEntity.WORD), unique = true)))
 class HistoryEntity(
     @PrimaryKey
     @ColumnInfo(name = WORD) var word: String,
@@ -19,4 +17,9 @@ class HistoryEntity(
 ) {
     fun toDataModel() =
         DataModel(word, description?.split(",")?.map { it -> Meanings(Translation(it), "") })
+
+    companion object {
+        const val WORD = "word"
+        private const val DESCRIPTION = "description"
+    }
 }

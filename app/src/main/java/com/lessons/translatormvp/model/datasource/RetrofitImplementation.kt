@@ -1,8 +1,8 @@
 package com.lessons.translatormvp.model.datasource
 
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
+import com.lessons.models.DataModel
 import com.lessons.translatormvp.BuildConfig
-import com.lessons.translatormvp.model.data.DataModel
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor

@@ -1,6 +1,6 @@
 package com.lessons.translatormvp.model.datasource
 
-import com.lessons.translatormvp.model.data.DataModel
+import com.lessons.models.DataModel
 import kotlinx.coroutines.Deferred
 import retrofit2.http.GET
 import retrofit2.http.Query

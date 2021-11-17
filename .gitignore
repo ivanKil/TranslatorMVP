@@ -16,3 +16,4 @@ local.properties
 apikey.properties
 /.idea
 app/schemas
+buildSrc/build

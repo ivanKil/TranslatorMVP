@@ -2,9 +2,9 @@ package com.lessons.translatormvp.view.history
 
 import android.os.Bundle
 import androidx.lifecycle.Observer
+import com.lessons.models.DataModel
 import com.lessons.translatormvp.databinding.ActivityHistoryBinding
 import com.lessons.translatormvp.model.data.AppState
-import com.lessons.translatormvp.model.data.DataModel
 import com.lessons.translatormvp.view.base.BaseActivity
 import org.koin.androidx.viewmodel.ext.android.viewModel
 

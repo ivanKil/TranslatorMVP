@@ -4,8 +4,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.lessons.models.DataModel
 import com.lessons.translatormvp.R
-import com.lessons.translatormvp.model.data.DataModel
 import com.lessons.translatormvp.utils.ui.convertMeaningsToString
 import kotlinx.android.synthetic.main.activity_main_recyclerview_item.view.*
 
