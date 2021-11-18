@@ -11,8 +11,10 @@ import com.lessons.translatormvp.model.repository.RepositoryImplementation
 import com.lessons.translatormvp.model.repository.RepositoryImplementationLocal
 import com.lessons.translatormvp.model.repository.RepositoryLocal
 import com.lessons.translatormvp.room.HistoryDataBase
+import com.lessons.translatormvp.view.history.HistoryActivity
 import com.lessons.translatormvp.view.history.HistoryInteractor
 import com.lessons.translatormvp.view.history.HistoryViewModel
+import com.lessons.translatormvp.view.main.MainActivity
 import com.lessons.translatormvp.view.main.MainInteractor
 import com.lessons.translatormvp.view.main.MainViewModel
 import org.koin.androidx.viewmodel.dsl.viewModel
@@ -30,11 +32,15 @@ val application = module {
 }
 
 val mainScreen = module {
-    factory { MainInteractor(repositoryRemote = get(), repositoryLocal = get()) }
-    viewModel { MainViewModel(interactor = get()) }
+    scope<MainActivity> {
+        scoped { MainInteractor(repositoryRemote = get(), repositoryLocal = get()) }
+        viewModel { MainViewModel(interactor = get()) }
+    }
 }
 
 val historyScreen = module {
-    factory { HistoryInteractor(repositoryRemote = get(), repositoryLocal = get()) }
-    viewModel { HistoryViewModel(interactor = get()) }
+    scope<HistoryActivity> {
+        scoped { HistoryInteractor(repositoryRemote = get(), repositoryLocal = get()) }
+        viewModel { HistoryViewModel(interactor = get()) }
+    }
 }

@@ -6,11 +6,14 @@ import com.lessons.models.DataModel
 import com.lessons.translatormvp.databinding.ActivityHistoryBinding
 import com.lessons.translatormvp.model.data.AppState
 import com.lessons.translatormvp.view.base.BaseActivity
-import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.androidx.scope.createScope
+import org.koin.core.component.KoinScopeComponent
+import org.koin.core.scope.Scope
 
-class HistoryActivity : BaseActivity<AppState, HistoryInteractor>() {
+class HistoryActivity : BaseActivity<AppState, HistoryInteractor>(), KoinScopeComponent {
+    override val scope: Scope by lazy { createScope(this) }
     private lateinit var binding: ActivityHistoryBinding
-    override lateinit var model: HistoryViewModel
+    override val model: HistoryViewModel by scope.inject()
     private val adapter: HistoryAdapter by lazy { HistoryAdapter() }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -35,8 +38,6 @@ class HistoryActivity : BaseActivity<AppState, HistoryInteractor>() {
         if (binding.historyActivityRecyclerview.adapter != null) {
             throw IllegalStateException("The ViewModel should be initialised first")
         }
-        val viewModel: HistoryViewModel by viewModel()
-        model = viewModel
         model.subscribe().observe(
             this@HistoryActivity,
             Observer<AppState> { renderData(it, ::setDataToAdapter) })
@@ -44,5 +45,10 @@ class HistoryActivity : BaseActivity<AppState, HistoryInteractor>() {
 
     private fun initViews() {
         binding.historyActivityRecyclerview.adapter = adapter
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        scope.close()
     }
 }

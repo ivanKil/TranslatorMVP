@@ -6,6 +6,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
 import androidx.appcompat.widget.SearchView
+import androidx.recyclerview.widget.RecyclerView
 import com.lessons.models.DataModel
 import com.lessons.translatormvp.R
 import com.lessons.translatormvp.databinding.ActivityMainBinding
@@ -16,14 +17,19 @@ import com.lessons.translatormvp.view.base.BaseActivity
 import com.lessons.translatormvp.view.descriptionscreen.DescriptionActivity
 import com.lessons.translatormvp.view.history.HistoryActivity
 import com.lessons.translatormvp.view.main.adapter.MainAdapter
+import com.lessons.utils.ui.viewById
 import kotlinx.android.synthetic.main.activity_main.*
+import org.koin.androidx.scope.createScope
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.component.KoinScopeComponent
+import org.koin.core.scope.Scope
 
-class MainActivity : BaseActivity<AppState, MainInteractor>() {
-
+class MainActivity : BaseActivity<AppState, MainInteractor>(), KoinScopeComponent {
+    override val scope: Scope by lazy { createScope(this) }
     private lateinit var binding: ActivityMainBinding
-    override lateinit var model: MainViewModel
+    override val model: MainViewModel by viewModel()//scope.inject()
     private val adapter: MainAdapter by lazy { MainAdapter(onListItemClickListener) }
+    private val mainActivityRecyclerview by viewById<RecyclerView>(R.id.main_activity_recyclerview)
 
     private val onListItemClickListener: MainAdapter.OnListItemClickListener =
         object : MainAdapter.OnListItemClickListener {
@@ -45,7 +51,10 @@ class MainActivity : BaseActivity<AppState, MainInteractor>() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+    }
 
+    override fun onResume() {
+        super.onResume()
         initViewModel()
         initViews()
     }
@@ -72,7 +81,7 @@ class MainActivity : BaseActivity<AppState, MainInteractor>() {
                 return false
             }
         })
-        binding.mainActivityRecyclerview.adapter = adapter
+        mainActivityRecyclerview.adapter = adapter
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -89,8 +98,8 @@ class MainActivity : BaseActivity<AppState, MainInteractor>() {
         if (binding.mainActivityRecyclerview.adapter != null) {
             throw IllegalStateException("The ViewModel should be initialised first")
         }
-        val viewModel: MainViewModel by viewModel()
-        model = viewModel
+        //val viewModel: MainViewModel by scope.inject()// by viewModel()
+        //model = viewModel
         model.subscribe().observe(this@MainActivity, { renderData(it, ::setDataToAdapter) })
         model.ldDataModelInDb.observe(this, {
             renderData(it) { list ->
@@ -114,6 +123,7 @@ class MainActivity : BaseActivity<AppState, MainInteractor>() {
                 } else {
                     showNoInternetConnectionDialog()
                 }
+                binding.searchView.clearFocus()
                 return false
             }
 
@@ -122,5 +132,10 @@ class MainActivity : BaseActivity<AppState, MainInteractor>() {
             }
         })
         binding.mainActivityRecyclerview.adapter = adapter
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        scope.close()
     }
 }
