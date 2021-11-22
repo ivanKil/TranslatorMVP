@@ -1,11 +1,18 @@
 package com.lessons.translatormvp.view.main
 
+import android.animation.ObjectAnimator
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
+import android.os.CountDownTimer
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
+import android.view.animation.AnticipateInterpolator
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.appcompat.widget.SearchView
+import androidx.core.animation.doOnEnd
 import androidx.recyclerview.widget.RecyclerView
 import com.lessons.models.DataModel
 import com.lessons.translatormvp.R
@@ -30,6 +37,9 @@ class MainActivity : BaseActivity<AppState, MainInteractor>(), KoinScopeComponen
     override val model: MainViewModel by viewModel()//scope.inject()
     private val adapter: MainAdapter by lazy { MainAdapter(onListItemClickListener) }
     private val mainActivityRecyclerview by viewById<RecyclerView>(R.id.main_activity_recyclerview)
+    private val SLIDE_LEFT_DURATION = 2000L
+    private val COUNTDOWN_DURATION = 100L
+    private val COUNTDOWN_INTERVAL = 100L
 
     private val onListItemClickListener: MainAdapter.OnListItemClickListener =
         object : MainAdapter.OnListItemClickListener {
@@ -50,7 +60,39 @@ class MainActivity : BaseActivity<AppState, MainInteractor>(), KoinScopeComponen
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
+        setDefaultSplashScreen()
         setContentView(binding.root)
+    }
+
+    private fun setDefaultSplashScreen() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S)
+            setSplashScreenHideAnimation()
+
+        setSplashScreenDuration()
+    }
+
+    @RequiresApi(31)
+    private fun setSplashScreenHideAnimation() {
+        splashScreen.setOnExitAnimationListener { splashScreenView ->
+            val slideLeft = ObjectAnimator.ofFloat(
+                splashScreenView,
+                View.TRANSLATION_X,
+                0f,
+                -splashScreenView.height.toFloat()
+            )
+            slideLeft.interpolator = AnticipateInterpolator()
+            slideLeft.duration = SLIDE_LEFT_DURATION
+
+            slideLeft.doOnEnd { splashScreenView.remove() }
+            slideLeft.start()
+        }
+    }
+
+    private fun setSplashScreenDuration() {
+        object : CountDownTimer(COUNTDOWN_DURATION, COUNTDOWN_INTERVAL) {
+            override fun onTick(millisUntilFinished: Long) {}
+            override fun onFinish() {}
+        }.start()
     }
 
     override fun onResume() {
